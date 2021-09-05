@@ -131,7 +131,7 @@ header nav {
 
     @include desktop {
       all: unset;
-      margin-right: 84px;
+      margin-right: 5em;
       height: 100%;
       @include display-setting(grid, space-between, center);
       grid-auto-flow: column;
@@ -140,6 +140,10 @@ header nav {
 
       li.nav-item {
         all: unset;
+
+        a {
+          padding: 0 0.3em;
+        }
       }
 
       li:last-child {

@@ -1,23 +1,46 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Home from "../views/Home.vue";
 
 Vue.use(VueRouter);
 
 const routes = [
   {
-    path: "/",
-    name: "Home",
-    component: Home,
+    path: "/alphashop/checkout",
+    name: "checkout",
+    redirect: "/alphashop/checkout/1",
+    component: () => import("@/views/Checkout.vue"),
+    children: [
+      {
+        path: "1",
+        name: "form-address",
+        component: () => import("@/components/Form_Address"),
+      },
+      {
+        path: "2",
+        name: "form-shipment",
+        component: () => import("@/components/Form_Shipment"),
+      },
+      {
+        path: "3",
+        name: "form-payment",
+        component: () => import("@/components/Form_Payment"),
+      },
+    ],
   },
   {
-    path: "/about",
-    name: "About",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/About.vue"),
+    path: "/alphashop",
+    name: "alphashop",
+    redirect: "/alphashop/checkout",
+  },
+  {
+    path: "/",
+    name: "root",
+    redirect: "/alphashop/checkout",
+  },
+  {
+    path: "*",
+    name: "not-found",
+    component: () => import("../views/NotFound.vue"),
   },
 ];
 

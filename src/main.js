@@ -4,18 +4,12 @@ import App from "./App.vue";
 import router from "./router";
 
 import "bootstrap";
-import {
-  BootstrapVue,
-  IconsPlugin,
-  BootstrapVueIcons
-} from "bootstrap-vue";
+import { BootstrapVue, IconsPlugin, BootstrapVueIcons } from "bootstrap-vue";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
 import "bootstrap-vue/dist/bootstrap-vue-icons.min.css";
 
-import {
-  goodsInChart
-} from "../src/store/dummyData";
+import { goodsInChart } from "../src/store/dummyData";
 
 Vue.config.productionTip = false;
 

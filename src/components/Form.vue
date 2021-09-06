@@ -16,51 +16,24 @@
           <!-- payment -->
         </div>
       </div>
-      <!-- FormButtons.vue -->
-      <div
-        id="form__button-control"
-        :class="[
-          'form__button-control',
-          { 'display-one-btn': currentCheckoutForm === 'form-address' },
-        ]"
-      >
-        <button
-          class="btn form__button-control__button--outline"
-          v-show="currentCheckoutForm !== 'form-address'"
-          @click.stop.prevent="goPrevCheckoutForm"
-        >
-          上一步
-        </button>
-
-        <button
-          class="btn form__button-control__button--primary"
-          v-show="currentCheckoutForm !== 'form-payment'"
-          @click.stop.prevent="goNextCheckoutForm"
-        >
-          下一步
-        </button>
-        <button
-          class="btn form__button-control__button--primary last-step"
-          v-show="currentCheckoutForm === 'form-payment'"
-          @click.stop.prevent="handleSubmit"
-        >
-          確認下單
-        </button>
-      </div>
+      <!-- StepButtons.vue -->
+      <StepButtons @submit="submited" :initCurrentStep="currentStep" />
     </form>
   </div>
 </template>
 <script>
 import Stepper from "../components/Stepper.vue";
+import StepButtons from "../components/StepButtons.vue";
 
 export default {
   name: "Form",
   components: {
     Stepper,
+    StepButtons,
   },
   data() {
     return {
-      currentCheckoutForm: "form-address",
+      currentStep: this.$router.currentRoute.name,
       currentEditFormAddress: {
         appellation: "",
         name: "",
@@ -85,34 +58,13 @@ export default {
   created() {
     this.currentCheckoutForm = this.$router.currentRoute.name;
   },
+  watch: {
+    $route() {
+      this.currentStep = this.$router.currentRoute.name;
+    },
+  },
   methods: {
-    goNextCheckoutForm() {
-      switch (this.currentCheckoutForm) {
-        case "form-address":
-          this.currentCheckoutForm = "form-shipment";
-          break;
-        case "form-shipment":
-          this.currentCheckoutForm = "form-payment";
-          break;
-        default:
-          this.currentCheckoutForm = "form-address";
-      }
-      this.$router.push({ name: this.currentCheckoutForm });
-    },
-    goPrevCheckoutForm() {
-      switch (this.currentCheckoutForm) {
-        case "form-shipment":
-          this.currentCheckoutForm = "form-address";
-          break;
-        case "form-payment":
-          this.currentCheckoutForm = "form-shipment";
-          break;
-        default:
-          this.currentCheckoutForm = "form-shipment";
-      }
-      this.$router.push({ name: this.currentCheckoutForm });
-    },
-    handleSubmit() {
+    submited() {
       //將資料整理成JSON先傳送父元件，由父元件打包表單與購物籃資料統一向後端發送API
       this.currentEditFormShipment = { ...this.$store.state.shipping };
       this.formPayload = {

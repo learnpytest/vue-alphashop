@@ -1,4 +1,5 @@
-const goodsInChart = [{
+const goodsInChart = [
+  {
     id: "1",
     name: "破壞補釘修身牛仔褲",
     quantityInChart: 1,
@@ -16,6 +17,4 @@ const goodsInChart = [{
   },
 ];
 
-export {
-  goodsInChart
-};
+export { goodsInChart };

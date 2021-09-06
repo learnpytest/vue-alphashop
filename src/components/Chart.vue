@@ -57,20 +57,28 @@
       </div>
       <hr style="background-color: #aaa" />
     </div>
+    <!-- stepButtons.vue -->
+    <StepButtons @submit="submit" :initCurrentStep="currentStep" />
   </div>
 </template>
 <script>
+import StepButtons from "../components/StepButtons.vue";
+
 export default {
   name: "Chart",
+  components: {
+    StepButtons,
+  },
   props: {
-    isFormSubmited: {
+    isSubmited: {
       type: Boolean,
-      required: true,
+      default: false,
     },
   },
   data() {
     return {
       goods: [],
+      currentStep: this.$router.currentRoute.name,
     };
   },
   computed: {
@@ -117,12 +125,20 @@ export default {
           : good;
       });
     },
+    submit() {
+      this.$emit("handleCartInfo", { goods: [...this.goods] });
+    },
   },
   watch: {
-    isFormSubmited() {
-      if (this.isFormSubmited) {
-        this.$emit("afterFormSubmited", { goods: [...this.goods] });
+    isSubmited() {
+      if (this.isSubmited) {
+        //receiving trigger from checkout
+        //將資料整理成JSON先傳送父元件，由父元件統一向後端發送API
+        this.$emit("handleCartTriggeredByForm", { goods: [...this.goods] });
       }
+    },
+    $route() {
+      this.currentStep = this.$router.currentRoute.name;
     },
   },
   filters: {
@@ -135,6 +151,13 @@ export default {
   },
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 @import "../assets/scss/components/_chart.scss";
+@import "../assets/scss/components/_formButton";
+.form__button-control {
+  //桌機
+  @include desktop {
+    display: none;
+  }
+}
 </style>

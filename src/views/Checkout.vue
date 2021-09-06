@@ -5,11 +5,16 @@
     <!-- <Stepper /> -->
     <!-- Form -->
     <div class="content-wrapper">
-      <Form @handleSubmit="afterHandleSubmit" />
+      <Form
+        :isSubmited="isSubmited"
+        @afterShipInfoHandled="afterShipInfoHandled"
+        @handleShipInfoTriggeredByCart="afterHandleShipInfoTriggeredByCart"
+      />
       <!-- Chart -->
       <Chart
-        :isFormSubmited="isFormSubmited"
-        @afterFormSubmited="afterFormSubmited"
+        :isSubmited="isSubmited"
+        @handleCartTriggeredByForm="handleCartTriggeredByForm"
+        @handleCartInfo="afterHandleCartInfo"
       />
       <div>
         <b-modal id="showResults" title="Purchase order">
@@ -34,18 +39,28 @@ export default {
   data() {
     return {
       results: { shipInfo: {}, goodsInCart: [] },
-      isFormSubmited: false,
+      isSubmited: false,
     };
   },
   methods: {
-    afterHandleSubmit(payload) {
-      this.isFormSubmited = true;
+    afterShipInfoHandled(payload) {
+      //save form's ship info
       this.results.shipInfo = { ...payload };
+      this.isSubmited = true;
     },
-    afterFormSubmited(payload) {
+    handleCartTriggeredByForm(payload) {
       this.results.goodsInCart = [payload.goods];
       this.$bvModal.show("showResults");
-      this.isFormSubmited = false;
+      this.isSubmited = false;
+    },
+    afterHandleCartInfo(payload) {
+      this.results.goodsInCart = [payload.goods];
+      this.isSubmited = true;
+    },
+    afterHandleShipInfoTriggeredByCart(payload) {
+      this.results.shipInfo = { ...payload };
+      this.$bvModal.show("showResults");
+      this.isSubmited = false;
     },
   },
 };

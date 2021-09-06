@@ -17,7 +17,7 @@
         </div>
       </div>
       <!-- StepButtons.vue -->
-      <StepButtons @submit="submited" :initCurrentStep="currentStep" />
+      <StepButtons @submit="submit" :initCurrentStep="currentStep" />
     </form>
   </div>
 </template>
@@ -30,6 +30,12 @@ export default {
   components: {
     Stepper,
     StepButtons,
+  },
+  props: {
+    isSubmited: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -59,12 +65,23 @@ export default {
     this.currentCheckoutForm = this.$router.currentRoute.name;
   },
   watch: {
+    isSubmited() {
+      if (this.isSubmited) {
+        //receiving trigger from cart
+        this.handleShipInfo();
+        this.$emit("handleShipInfoTriggeredByCart", this.formPayload);
+      }
+    },
     $route() {
       this.currentStep = this.$router.currentRoute.name;
     },
   },
   methods: {
-    submited() {
+    submit() {
+      this.handleShipInfo();
+      this.$emit("afterShipInfoHandled", this.formPayload);
+    },
+    handleShipInfo() {
       //將資料整理成JSON先傳送父元件，由父元件打包表單與購物籃資料統一向後端發送API
       this.currentEditFormShipment = { ...this.$store.state.shipping };
       this.formPayload = {
@@ -72,7 +89,6 @@ export default {
         shipMethod: { ...this.currentEditFormShipment },
         paymentMethod: { ...this.currentEditFormPayment },
       };
-      this.$emit("handleSubmit", this.formPayload);
     },
   },
 };
@@ -80,4 +96,12 @@ export default {
 <style lang="scss">
 @import "../assets/scss/components/_formButton";
 @import "../assets/scss/components/_form";
+.form__button-control {
+  //手機
+  display: none;
+  //桌機
+  @include desktop {
+    display: flex;
+  }
+}
 </style>

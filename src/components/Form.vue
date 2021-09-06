@@ -1,7 +1,7 @@
 <template>
   <div class="panel form-panel">
     <!-- the form contains a stepper bar and three parts of form which has address, shipment, payment -->
-    <Stepper :currentCheckoutForm="currentCheckoutForm" />
+    <Stepper :currentStep="currentStep" />
     <!-- stepper -->
     <form id="form-control" action="">
       <div class="form__wrapper">
@@ -60,9 +60,6 @@ export default {
       },
       formPayload: this.initFormPayload,
     };
-  },
-  created() {
-    this.currentCheckoutForm = this.$router.currentRoute.name;
   },
   watch: {
     isSubmited() {

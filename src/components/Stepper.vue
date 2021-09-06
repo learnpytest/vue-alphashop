@@ -2,11 +2,7 @@
   <div id="stepper-control" class="panel stepper-panel">
     <div class="wrapper stepper-panel__stepper-wrapper justify-content-between">
       <div
-        :class="[
-          'step',
-          'active',
-          { checked: currentCheckoutForm !== 'form-address' },
-        ]"
+        :class="['step', 'active', { checked: currentStep !== 'form-address' }]"
       >
         <div class="circle-container"></div>
         <span class="step__label">寄送地址</span>
@@ -14,17 +10,15 @@
       <div
         :class="[
           'step',
-          { active: currentCheckoutForm === 'form-shipment' },
-          { checked: currentCheckoutForm === 'form-payment' },
+          { active: currentStep === 'form-shipment' },
+          { checked: currentStep === 'form-payment' },
         ]"
       >
         <div class="circle-container"></div>
         <span class="step__label label-container">運送方式</span>
         <span class="connect-line"></span>
       </div>
-      <div
-        :class="['step', { active: currentCheckoutForm === 'form-payment' }]"
-      >
+      <div :class="['step', { active: currentStep === 'form-payment' }]">
         <div class="circle-container"></div>
         <span class="step__label label-container">付款資訊</span>
         <span class="connect-line"></span>
@@ -36,7 +30,7 @@
 export default {
   name: "Stepper",
   props: {
-    currentCheckoutForm: {
+    currentStep: {
       type: String,
       default: "form-address",
     },
